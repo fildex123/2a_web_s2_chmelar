@@ -1,0 +1,24 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+body{
+  background-color: black;
+  font-family: 'Times New Roman', Times, serif;
+}
+.body, .header, .footer{
+margin: 5px;
+border: 1px solid white;
+background-color: rgba(200, 162, 68, 0.875);
+  text-align: center;
+}
+div.sloupec{
+  display: inline-block;
+  text-align:  justify;
+  width: 33%;
+}
+.sloupec a{
+  color: tomato;
+  position: relative;
+  left: 50%;
+}

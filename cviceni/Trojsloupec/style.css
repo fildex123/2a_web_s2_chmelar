@@ -1,0 +1,46 @@
+html {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(220, 210, 107);
+}
+*{
+  text-align: justify;
+  font-size: 20px;
+}
+#page{
+  background-color: white;
+  margin: 3%;
+  border: 1px solid black;
+}
+#central{
+  display: flex;
+  align-items: flex-start;
+}
+header h1{
+  text-align: center;
+  font-size: 50px;
+}
+main{
+display: inline-block;
+  margin: 0%;
+  padding: 5%;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  width: 44%;
+}
+aside{
+  display: inline-block;
+  margin: 0%;
+  padding: 5%;
+  width: 25%;
+}
+nav{
+  display: inline-block;
+  margin: 0%;
+  padding: 5%;
+  width: 15%;
+}
+footer{
+  text-align: center;
+  border: 2px solid black;
+}

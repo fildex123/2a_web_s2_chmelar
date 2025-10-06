@@ -1,0 +1,39 @@
+header{
+    color:aqua;
+    text-align: center;
+}
+header p{
+    color:rgb(68, 67, 67);
+    font-style: italic;
+}
+nav{
+    list-style-type: none;
+    background-color: rgb(228, 210, 93);
+}
+.highlight{
+    font-weight: bolder;
+    color: blue;
+}
+p.note{
+    background-color: rgb(183, 210, 221);
+}
+#first-article{
+    color:green;
+}
+.class table{
+    border-width: 2px;
+    text-align: center;
+}
+
+    tr:nth-child(even) {
+  background-color: #b42e2e; /* sudé řádky */
+}
+
+tr:nth-child(odd) {
+  background-color: #315ddf; /* liché řádky */
+}
+#main-footer .emphasize{
+    background-color: antiquewhite;
+    border: 8px;
+    border-color: chocolate;
+}

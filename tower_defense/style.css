@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;     /* horizontální centrování */
+  align-items: center;         /* vertikální centrování */
+  height: 100vh;               /* výška celé obrazovky */
+  background-color: #222;      /* volitelné pozadí stránky */
+}
+
+div {
+  width: 256px;
+  height: 256px;
+  background-image: url('img/squre_div.png'); /* odstraněno zpětné lomítko */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+
+  display: flex;
+  flex-direction: column;      /* tlačítka pod sebou */
+  justify-content: center;     /* vertikální zarovnání obsahu */
+  align-items: center;         /* horizontální zarovnání obsahu */
+  gap: -100px;                   /* mezery mezi tlačítky */
+}
+div button {
+  height: 40px;
+  width: 100px;
+  background: none; /* odstraní původní pozadí */
+  background-image: url('img/button.png');
+  background-size: auto auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+  border: none; /* volitelné: odstraní rámeček */
+  cursor: pointer; /* volitelné: změní kurzor na ručičku */
+}
+
+div button:hover {
+  background-image: url('img/button_checked.png');
+}

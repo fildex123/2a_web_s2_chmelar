@@ -1,0 +1,40 @@
+html {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(0, 0, 0);
+}
+*{
+  color: whitesmoke;
+  font-family: Georgia, Times, serif;
+}
+    
+table {
+  border-collapse: collapse;
+}
+
+td,
+th {
+  border: 1px solid black;
+  padding: 2px 4px;
+}
+h1,h2,h3{
+  color: gold;
+  font-family:'Gill Sans', Calibri, sans-serif ;
+}
+a{
+  color: tomato;
+}
+#uvod{
+  font-variant: small-caps;
+}
+.kroky{
+  font-size: small;
+  font-style: italic;
+}
+ol a, ul a{
+  font-style: italic;
+  font-weight: bold;
+}
+ul{
+  font-weight: bold;
+}
