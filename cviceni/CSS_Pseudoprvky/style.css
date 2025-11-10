@@ -1,0 +1,33 @@
+/* Reset základního vzhledu */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  line-height: 1.6;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+.active{
+  text-underline-offset: red ;
+}
+a:hover{
+  color: red;
+}
+ul[data-role="dev"]{
+  color: brown;
+}
+ul:last-child{
+  font-style: italic;
+}
+ul.team li::before{
+  content: "★";
+}
+details:open{
+  background-color: rgb(159, 159, 159);
+}
+summary:hover{
+  color: green;
+  font-weight: bold;
+}
