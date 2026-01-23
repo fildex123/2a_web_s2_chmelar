@@ -1,41 +1,297 @@
-body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;     /* horizontální centrování */
-  align-items: center;         /* vertikální centrování */
-  height: 100vh;               /* výška celé obrazovky */
-  background-color: #222;      /* volitelné pozadí stránky */
+html{
+  background-color: rgb(26, 46, 26);
+  overflow: hidden; height: 100%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-div {
-  width: 256px;
-  height: 256px;
-  background-image: url('img/squre_div.png'); /* odstraněno zpětné lomítko */
+body{
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1f;
+  grid-template-areas: 
+  "menu other"
+  ;
+  justify-content: center; 
+  align-content: center;
+  height: 100vh;
+}
+body>div{
+  width: minmax(50vh,100%);
+  height: 100vh;
+  background-image: url('img/squre_div.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
   image-rendering: pixelated;
-
-  display: flex;
-  flex-direction: column;      /* tlačítka pod sebou */
-  justify-content: center;     /* vertikální zarovnání obsahu */
-  align-items: center;         /* horizontální zarovnání obsahu */
-  gap: -100px;                   /* mezery mezi tlačítky */
+  opacity: 90%;
 }
+.nav {
+  grid-area: menu;
+  display: grid;
+  grid-template-columns: 0.5fr;
+  grid-template-rows: 15% 15% 15% 15%;
+  grid-template-areas: 
+  "play"
+  "setings"
+  "my_profile"
+  "statistics"
+  ;
+  justify-content: center; 
+  align-content: center;
+}
+.other {
+  grid-area: other;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: larger;
+}
+
 div button {
-  height: 40px;
-  width: 100px;
-  background: none; /* odstraní původní pozadí */
-  background-image: url('img/button.png');
-  background-size: auto auto;
+  background: none;
+  background-image: url('img/button_untouched.png');
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
   image-rendering: pixelated;
-  border: none; /* volitelné: odstraní rámeček */
-  cursor: pointer; /* volitelné: změní kurzor na ručičku */
+  border: none;
+  cursor: pointer;
 }
 
 div button:hover {
-  background-image: url('img/button_checked.png');
+  background-image: url('img/button_touched.png');
 }
+
+#play{
+  background-image: url('img/play_button_untoched.png');
+grid-area: play;
+}#play:hover{background-image: url('img/play_button_touched.png');}
+#setings{
+  background-image: url('img/setings_untouched.png');
+grid-area: setings;
+} #setings:hover{background-image: url('img/setings_touched.png');}
+#my_profile{
+  background-image: url('img/my_profile_untouched.png');
+grid-area: my_profile;
+}#my_profile:hover{background-image: url('img/my_profile_touched.png');}
+#statistics{
+grid-area: statistics;
+background-image: url('img/statistics_untouched.png');
+}#statistics:hover{background-image: url('img/Statistics_touched.png');}
+
+#home{
+  position: absolute;image-rendering: pixelated;
+  z-index: 9999;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+  height: 8vh;
+  width: 8vh;
+  left: 94%; top: 2%;
+  background-image: url('img/home_touched.png');
+}#home:hover{background-image: url('img/homu_untouched.png');}
+
+.profile{
+  grid-area: other;
+  font-size: larger;
+  display: grid;
+  text-align: center;
+  width: 70%;
+  height: 70%;
+  gap: 3vh;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 15% 15% 15% 15% 15%;
+  grid-template-areas:
+  "header header"
+  "name save"
+  "skin skin"
+  "skin skin"
+  "support support"
+  ;
+}
+
+.settings {
+  grid-area: other;
+  font-size: larger;
+  display: grid;
+  text-align: center;
+  width: 70%;
+  height: 70%;
+  gap: 3vh;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 15% 15% 15% 15% 15%;
+  grid-template-areas:
+  "header header"
+  "blood music"
+  "volume volume"
+  "speed speed"
+  "save save"
+  ;
+}
+.header{
+  grid-area: header;
+}
+#blood{
+  grid-area: blood;
+}
+#music{
+  grid-area: music;
+}
+#volume{
+  grid-area: volume;
+}
+#speed{
+  grid-area: speed;
+}
+#save{
+  grid-area: save;
+  font-size: x-large;
+}
+#skin{
+  grid-area: skin;
+  
+}
+#openPopup0{
+  grid-area: support;
+}
+.lbl{
+  display: inline-block;
+  width: 50%;
+  height: 35%;
+
+  background-image: url('img/button_untouched.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  image-rendering: pixelated;
+}
+
+
+input[type="range"] {
+  width: 100%;
+}
+input[type="checkbox"] {
+  width: 20%;
+  height: 20%;
+}
+.popup {
+  font-size: larger;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  width: 20%;
+  height: 60%;
+  padding: 5%;
+  border-radius: 10px;
+  text-align: center;
+}
+
+
+#ninja_po1{
+  z-index: -1;
+  position: absolute;image-rendering: pixelated;
+  height: 20vh;left: 90%; transform: translateX(-50%);
+  animation: move1 5s infinite ease-in-out;
+}
+#ninja_po2{
+  z-index: -1;
+  position: absolute;image-rendering: pixelated;
+  height: 20vh;left: 75%; transform: translateX(-50%);
+  animation: move2 3s infinite ease-in-out;
+
+}#ninja_po3{
+  z-index: -1;
+  position: absolute;image-rendering: pixelated;
+  height: 20vh;left: 60%; transform: translateX(-50%);
+  animation: move3 4s infinite ease-in-out;
+}#ninja_po4{
+  z-index: -1;
+  position: absolute;image-rendering: pixelated;
+  height: 20vh;left: 45%; transform: translateX(-50%);
+  animation: move1 3s infinite ease-in-out;
+}#ninja_po5{
+  z-index: -1;
+  position: absolute;image-rendering: pixelated;
+  height: 20vh;left: 30%; transform: translateX(-50%);
+  animation: move3 5s infinite ease-in-out;
+}#ninja_po6{
+  z-index: -1;
+  position: absolute;image-rendering: pixelated;
+  height: 20vh;left: 15%; transform: translateX(-50%);
+  animation: move2 4s infinite ease-in-out;
+}
+@keyframes move1 { 
+  0% { top: 90%;  opacity: 0;  } 
+  25% { top: 50%;  opacity: 1;  } 
+  50% { top: -20%;  opacity: 0;  }
+  100% { top: -20%;  opacity: 0;  }
+  }
+  @keyframes move2 { 
+  0%  { top: 90%;  opacity: 0;  }
+  50% { top: 90%;  opacity: 0;  } 
+  75% { top: 50%;  opacity: 1;  } 
+  100% { top: -20%;  opacity: 0;  }
+  }
+  @keyframes move3 { 
+  0% { top: 90%;  opacity: 0;  } 
+  25% { top: 100%;  opacity: 0;  } 
+  50% { top: 50%;  opacity: 1;  } 
+  75% { top: -20%;  opacity: 0;  }
+  100% { top: -20%;  opacity: 0;  }
+  }
+
+  @media (max-width: 1000px) { 
+
+    .other{
+      font-size: medium;
+    }
+    #home{
+      left: 92%;
+    }
+  }
+  @media (max-width: 820px) { 
+
+    .other{
+      font-size: small;
+    }
+    #home{
+      left: 90%;
+    }
+  }
+  @media (max-width: 740px) { 
+    #home{
+      left: 85%;
+    }
+    body{
+      height: auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+      grid-template-areas: 
+      "menu"
+      "other";
+    }
+    html{
+      overflow: scroll;
+    }
+    body>div{
+      width: 100vw;
+      height: 80vh;
+    }
+  }

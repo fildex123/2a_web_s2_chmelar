@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="home" onclick="window.location.href='index.html'"></button>
+    <div class="nav">
+        <button id="play" onclick="window.location.href='play.html'"></button>
+        <button id="setings" onclick="window.location.href='settings.html'"></button>
+        <button id="my_profile" onclick="window.location.href='my_profile.html'"></button>
+        <button id="statistics" onclick="window.location.href='statistics.html'"></button>
+    </div>
+    <div class="other">
+    <form class="settings">
+        <h1 class="header">Settings</h1>
+        <label id="blood" for="blood">Zobrazit krev</label>
+        <input id="blood"type="checkbox">
+        <label id="music" for="music">Hudba</label>
+        <input id="music" type="checkbox">
+    <label id="volume" for="volume" class="lbl">Hlasitost</label>
+    <input type="range" id="volume" name="volume" min="0" max="100" value="50">
+    <label id="speed" for="speed" class="lbl">Rychlost hry</label>
+    <input type="range" id="speed" name="speed" min="1" max="10" value="5">
+    <button id="save" type="submit">Uložit</button>
+    </form>
+    </div>
+    <img id="ninja_po1" src="img/ninja.png" alt="">
+    <img id="ninja_po2" src="img/ninja.png" alt="">
+    <img id="ninja_po3" src="img/ninja.png" alt="">
+    <img id="ninja_po4" src="img/ninja.png" alt="">
+    <img id="ninja_po5" src="img/ninja.png" alt="">
+    <img id="ninja_po6" src="img/ninja.png" alt="">
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My_profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="home" onclick="window.location.href='index.html'"></button>
+    <div class="nav">
+        <button id="play" onclick="window.location.href='play.html'"></button>
+        <button id="setings" onclick="window.location.href='settings.html'"></button>
+        <button id="my_profile" onclick="window.location.href='my_profile.html'"></button>
+        <button id="statistics" onclick="window.location.href='statistics.html'"></button>
+    </div>
+    <div class="other">
+    <div class="profile">
+        <h1 class="header">Můj profil</h1>
+        <input type="text" name="Nickname" placeholder="Nickname" id="name">
+        <button id="save" type="submit">Uložit</button>
+        <div id="skin">
+            <button id="openPopup1">Back</button>
+            <img src="img/ninja.png" alt="" height="80%">
+            <button id="openPopup2">Next</button>
+        </div>
+        <button id="openPopup0">Premiový účet</button>
+    </div
+    >
+    </div>
+    <div id="popup" class="popup"> 
+        <div class="popup-content"> 
+            <p>Prosím peníze</p> 
+            <p>Funkce dostupná jen pro prémiové účty</p> 
+            <img src="img/IMG-20260118-WA0006.jpg" alt="" height="80%">
+            <button id="closePopup">Zavřít
+            </button> 
+        </div> 
+    </div>
+    <script src="popup.js"></script>
+    <img id="ninja_po1" src="img/ninja.png" alt="">
+    <img id="ninja_po2" src="img/ninja.png" alt="">
+    <img id="ninja_po3" src="img/ninja.png" alt="">
+    <img id="ninja_po4" src="img/ninja.png" alt="">
+    <img id="ninja_po5" src="img/ninja.png" alt="">
+    <img id="ninja_po6" src="img/ninja.png" alt="">
+</body>
+</html>

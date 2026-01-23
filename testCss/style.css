@@ -1,0 +1,58 @@
+header img{
+    height: 250px;
+    width: 500px;
+}
+header{
+    margin-top: 65px;
+    background-color: white;
+}
+nav{
+    position: fixed;
+    top: 0cap;
+    background-color: royalblue;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+}
+nav a{
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+nav a:hover{
+    color: royalblue;
+    background-color: white;
+}
+html{
+    font-family:'Courier New', Courier, monospace;
+    text-align: center;
+}
+main{
+    padding: 1em;
+    background-color: #f4f4f4;
+    margin-bottom: 40px;
+}
+section{
+    padding-left: 50px;
+    padding-right: 50px;
+}
+section p{
+    text-align: justify;
+}
+section>p::first-letter {
+color: royalblue;
+font-size: 50px;
+    font-weight: bold;
+}
+.blok{
+    display: inline-block;
+    width: 40%;
+}
+footer{
+    color: white;
+    position: fixed;
+    top: 95%;
+    background-color: royalblue;
+    width: 100%;
+    text-align: right;
+}
