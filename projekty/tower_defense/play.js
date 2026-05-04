@@ -1,4 +1,9 @@
-const btn = document.getElementById("target-btn");
+
+
+
+
+
+/*const btn = document.getElementById("target-btn");
 const scoreText = document.getElementById("score");
 let score = 0;
 
@@ -28,3 +33,20 @@ document.getElementById("prank").addEventListener("click", function () {
     document.getElementById("myImage").style.display = "block"; 
 });
 moveButton();
+
+
+<h1>Mini Hra – Klikni na ninju!</h1>
+
+    <div id="game-area">
+        <button id="target-btn"></button>
+    </div>
+
+    <p id="score">Skóre: 0</p>
+    <img id="myImage" src="img/Fix-the-Blue-Screen-of-Death-1568x882.png" alt=""> 
+    <button id="prank">End game</button>
+    <audio src="audio/Ninja ninja ninja ninja ninja ninja ninj.mp3" autoplay loop></audio>
+
+
+
+
+*/

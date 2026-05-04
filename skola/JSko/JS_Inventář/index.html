@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Inventář - JS Cvičení</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="game-container">
+    <aside class="panel stats-panel">
+        <h2>Statistiky postavy</h2>
+        <div class="stat-row">Zlato: <span id="stat-gold" class="stat-value">0</span></div>
+        <div class="stat-row">Útok: <span id="stat-attack" class="stat-value">10</span></div>
+        <div class="stat-row">Obrana: <span id="stat-defense" class="stat-value">5</span></div>
+        
+        <h3 style="margin-top: 20px;">Vybaveno:</h3>
+        <div id="equipped-slots">
+            <div class="equipped-slot" id="slot-weapon">Zbraň: <span>Nic</span></div>
+            <div class="equipped-slot" id="slot-armor">Zbroj: <span>Nic</span></div>
+        </div>
+    </aside>
+
+    <main class="panel inventory-panel">
+        <h2>Inventář</h2>
+        <div id="inventory-grid" class="dropzone" data-zone="inventory"></div>
+    </main>
+
+    <aside class="right-panel">
+        <div class="panel details-panel">
+            <h2>Detail předmětu</h2>
+            <div id="item-details">
+                <em>Najeďte myší na předmět...</em>
+            </div>
+        </div>
+
+        <div class="panel merchant-panel dropzone" id="merchant-zone" data-zone="merchant">
+            <h2>Obchodník</h2>
+            <p>Přetáhni sem předmět k prodeji.</p>
+            <div id="merchant-offer" class="hidden">
+                <p>Nabízím: <span id="offer-price">0</span> zlaťáků</p>
+                <p class="timer-warning">Čas na rozmyšlenou: <span id="offer-timer">10</span>s</p>
+                <button id="btn-sell">Prodat</button>
+            </div>
+        </div>
+
+        <div class="panel trash-panel dropzone" id="trash-zone" data-zone="trash">
+            <h2>🗑️ Koš</h2>
+            <p>Přetáhni pro zničení</p>
+        </div>
+    </aside>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Lead Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Sales Dashboard: Lead Tracker</h1>
+        </header>
+
+        <main>
+            <section class="card form-section">
+                <h2>Add New Lead</h2>
+                <form id="add-lead-form">
+                    <div class="form-group">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" placeholder="e.g. Acme Corp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Contact Email</label>
+                        <input type="email" id="contactEmail" placeholder="e.g. buyer@acme.com" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Lead</button>
+                    <span id="draft-status" class="draft-status"></span>
+                </form>
+            </section>
+
+            <section class="card table-section">
+                <div class="table-header">
+                    <h2>Active Leads</h2>
+                    <button id="bulk-contact-btn" class="btn btn-secondary">Mark Selected as Contacted</button>
+                </div>
+
+                <table id="leads-table">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox">Select</th>
+                            <th>Company</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leads-tbody">
+                        <!-- Příklad toho, co bude JS generovat: -->
+                        <!-- 
+                        <tr>
+                            <td><input type="checkbox" class="lead-checkbox" value="1"></td>
+                            <td>Acme Corp</td>
+                            <td>purchasing@acmecorp.com</td>
+                            <td><span class="badge badge-new">New</span></td>
+                        </tr> 
+                        -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

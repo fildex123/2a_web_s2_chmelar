@@ -1,0 +1,12 @@
+div{
+    display: none;
+    position: absolute;
+    top:36%;
+    left:44%;
+    height: 30vh;
+    width: 30vh;
+    background-color: blue;
+}
+div p{
+    color: aliceblue;
+}

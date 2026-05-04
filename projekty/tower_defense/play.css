@@ -7,6 +7,7 @@ body {
     background: #f0f0f0;
     text-align: center;
     background-color:#333;
+    cursor: url('./img/aim.png'), auto;
 }
 
 #game-area {
@@ -49,3 +50,17 @@ img{
             object-fit:cover;
             z-index:9999;
 }
+
+
+#home{
+  position: absolute;image-rendering: pixelated;
+  z-index: 9999;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+  height: 8vh;
+  width: 8vh;
+  left: 94%; top: 2%;
+  background-image: url('img/home_touched.png');
+}#home:hover{background-image: url('img/homu_untouched.png');}

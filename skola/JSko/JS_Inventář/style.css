@@ -1,0 +1,141 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px;
+}
+
+.game-container {
+    display: grid;
+    grid-template-columns: 250px 1fr 300px;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 90vh;
+}
+
+.panel {
+    background-color: #34495e;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #7f8c8d;
+    padding-bottom: 5px;
+}
+
+/* Statistiky */
+.stat-row {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.stat-value {
+    font-weight: bold;
+    color: #f1c40f;
+}
+.equipped-slot {
+    background: #2c3e50;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px dashed #7f8c8d;
+}
+
+/* Inventář */
+#inventory-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    min-height: 200px;
+}
+
+/* Položka v inventáři */
+.item {
+    width: 80px;
+    height: 80px;
+    background-color: #7f8c8d;
+    border: 2px solid #bdc3c7;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s;
+}
+
+.item:hover {
+    transform: scale(1.05);
+    border-color: #f1c40f;
+}
+
+/* Třída pro aktivovaný (vybavený) předmět */
+.item.active {
+    border-color: #2ecc71;
+    box-shadow: 0 0 10px #2ecc71;
+    background-color: #27ae60;
+}
+
+/* Pravý panel rozložení */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Dropzóny */
+.dropzone {
+    border: 2px dashed transparent;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.dropzone.drag-over {
+    border-color: #f1c40f;
+    background-color: rgba(241, 196, 15, 0.1);
+}
+
+#trash-zone {
+    text-align: center;
+    color: #e74c3c;
+    margin-top: auto;
+}
+#trash-zone.drag-over {
+    border-color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.2);
+}
+
+/* Obchodník */
+.hidden {
+    display: none;
+}
+.timer-warning {
+    color: #e67e22;
+    font-weight: bold;
+    margin: 10px 0;
+}
+#btn-sell {
+    width: 100%;
+    padding: 10px;
+    background-color: #f1c40f;
+    border: none;
+    color: #2c3e50;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+}
+#btn-sell:hover {
+    background-color: #f39c12;
+}
