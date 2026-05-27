@@ -1,14 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Movement</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IRON BASTION</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div id="player"></div>
 
-    <script src="script.js"></script>
+  <canvas id="game-canvas"></canvas>
+  <div class="scanline"></div>
+
+  <!-- HUD Top Bar -->
+  <div id="hud-top">
+    <div class="hud-title">IRON BASTION</div>
+    <div class="hud-sep"></div>
+    <div class="hud-block">
+      <div class="hud-label">Credits</div>
+      <div class="hud-value amber" id="hud-money">500</div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-block">
+      <div class="hud-label">Base HP</div>
+      <div class="hud-value" id="hud-hp">100</div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-block">
+      <div class="hud-label">Wave</div>
+      <div class="hud-value blue" id="hud-wave">0</div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-block">
+      <div class="hud-label">Enemies</div>
+      <div class="hud-value red" id="hud-enemies">0</div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-block">
+      <div class="hud-label">Kills</div>
+      <div class="hud-value" id="hud-kills">0</div>
+    </div>
+    <div class="hud-sep"></div>
+    <div class="hud-block">
+      <div class="hud-label">Next Wave</div>
+      <div class="hud-value blue" id="hud-timer">—</div>
+    </div>
+  </div>
+
+  <!-- Shop Bar -->
+  <div id="shop">
+    <div class="shop-label">DEPLOY</div>
+
+    <button class="tower-btn" data-type="gun">
+      <canvas class="t-preview" width="40" height="40" data-draw="gun"></canvas>
+      <div class="t-name">GUNPOST</div>
+      <div class="t-cost">¢75</div>
+      <div class="t-stat">Fast · Short</div>
+    </button>
+
+    <button class="tower-btn" data-type="cannon">
+      <canvas class="t-preview" width="40" height="40" data-draw="cannon"></canvas>
+      <div class="t-name">CANNON</div>
+      <div class="t-cost">¢150</div>
+      <div class="t-stat">Splash · Med</div>
+    </button>
+
+    <button class="tower-btn" data-type="laser">
+      <canvas class="t-preview" width="40" height="40" data-draw="laser"></canvas>
+      <div class="t-name">LASER</div>
+      <div class="t-cost">¢250</div>
+      <div class="t-stat">Beam · Long</div>
+    </button>
+
+    <button class="tower-btn" data-type="tesla">
+      <canvas class="t-preview" width="40" height="40" data-draw="tesla"></canvas>
+      <div class="t-name">TESLA</div>
+      <div class="t-cost">¢350</div>
+      <div class="t-stat">Chain · Med</div>
+    </button>
+
+    <button class="tower-btn" data-type="missile">
+      <canvas class="t-preview" width="40" height="40" data-draw="missile"></canvas>
+      <div class="t-name">MISSILE</div>
+      <div class="t-cost">¢400</div>
+      <div class="t-stat">Homing · Xlong</div>
+    </button>
+  </div>
+
+  <!-- Wave Alert -->
+  <div id="wave-alert"></div>
+
+  <!-- Tooltip -->
+  <div id="tooltip"></div>
+
+  <!-- Controls Hint -->
+  <div id="controls-hint">
+    WASD · MOVE CAMERA<br>
+    CLICK · PLACE TOWER<br>
+    ESC · DESELECT
+  </div>
+
+  <!-- Game Over Overlay -->
+  <div id="overlay">
+    <h1 id="overlay-title">BASTION LOST</h1>
+    <p id="overlay-sub">Wave 0 · 0 enemies eliminated</p>
+    <button id="overlay-btn" onclick="location.reload()">REDEPLOY</button>
+  </div>
+
+  <script src="game.js"></script>
 </body>
 </html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tower Defense Base Protection</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="ui">
+    <div class="panel">
+      <div>Credits: <span id="credits">100</span></div>
+      <div>Wave: <span id="wave">0</span></div>
+      <div>Enemies left: <span id="enemiesLeft">0</span></div>
+    </div>
+    <div class="panel">
+      <button id="towerBtn">Basic Tower (cost 25)</button>
+      <button id="startWaveBtn">Start Wave</button>
+    </div>
+  </div>
+
+  <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+  <div id="waveBanner" class="hidden">Wave 1</div>
+
+  <script src="game.js"></script>
+</body>
+</html>

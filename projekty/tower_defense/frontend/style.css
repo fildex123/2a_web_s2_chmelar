@@ -170,6 +170,10 @@ background-image: url('img/statistics_untouched.png');
 
   image-rendering: pixelated;
 }
+html, body, button, a, div, span, canvas {
+  cursor: url('img/aim.png') 11 11, none !important;
+  image-rendering: pixelated;
+}button, a, span:hover{cursor: url('img/aim-hover.png') 11 11, none !important;}
 
 
 input[type="range"] {
@@ -295,3 +299,4 @@ input[type="checkbox"] {
       height: 80vh;
     }
   }
+  
