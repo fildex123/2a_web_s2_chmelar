@@ -1,36 +1,88 @@
 html{
-background-color: #333;
+background-color: rgb(26, 46, 26);
+  overflow: hidden;
 }
 html, body, button, a, div, span, canvas {
-  cursor: url('img/aim.png') 11 11, none !important;
+  cursor: url('img/aim.png') 22 22, none !important;
   image-rendering: pixelated;
-}button, a, span,#item-selected:hover{cursor: url('img/aim-hover.png') 11 11, none !important;}
+}button, a, span,#item-selected:hover{cursor: url('img/aim-hover.png') 22 22, none !important;}
 
 body {
     font-family: Arial, sans-serif;
     background: #f0f0f0;
     text-align: center;
-    background-color:#333;
+    background-color:rgb(26, 46, 26);
 }
-#item-selected{
-    position: absolute;
-    top: 90vh;
-    left: 5vh;
-    height: 64px;
-    width: 64px;
-    background-color: #f0f0f0;
+#item-selected {
+  position: absolute;
+  top: 90vh;
+  left: 5vh;
+  height: 64px;
+  width: 64px;
+  background-color: #f0f0f0;
+  image-rendering: pixelated;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+#item-selected img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+  
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
 
-#home{
-  position: absolute;image-rendering: pixelated;
+.ui{
+position: absolute;image-rendering: pixelated;
   z-index: 9999;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
   image-rendering: pixelated;
+}
+#home{
   height: 8vh;
   width: 8vh;
   left: 94%; top: 2%;   
   background-image: url('img/home_touched.png');
 }#home:hover{background-image: url('img/homu_untouched.png');}
+
+
+.in-game{
+  position: absolute;
+  transform: translate(var(--x), var(--y)) scale(var(--scale, 1));
+  transform-origin: center center;
+}
+
+.out-of-field{
+  display: none;
+}
+
+img{
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+.bigger{
+  scale:3;
+}
+
+div{
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  outline: none;
+  pointer-events: none;
+}
