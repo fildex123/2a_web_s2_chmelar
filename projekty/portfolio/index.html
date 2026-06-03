@@ -1,29 +1,267 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="img/logo_ja_normal.png">
-    <title>Filip Chmelář</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Navigace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Outfit:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #f4f1ec; }
+canvas { display: block; width: 100vw; height: 100vh; }
+#labels { position: fixed; inset: 0; pointer-events: none; }
+
+/* ════════════════════════════════════════════════
+   STYL LABELU — upravujte zde
+   ════════════════════════════════════════════════ */
+.slice-label {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  /* box */
+  background: rgba(235, 230, 222, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 10px 18px;
+
+  /* přechod */
+  transition: opacity .3s ease, background .25s ease;
+}
+.slice-label.hovered {
+  background: rgba(218, 212, 202, 0.92);
+}
+
+/* hlavní název */
+.slice-label .name {
+  font-family: 'Bernard MT', serif;
+  font-weight: 300;
+  color: rgba(18, 14, 10, 0.88);
+  line-height: 1.1;
+  /* font-size se nastavuje dynamicky v JS — viz LABEL_FONT_MIN/MAX */
+}
+
+/* podtitulek */
+.slice-label .sub {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  letter-spacing: .10em;
+  color: rgba(18, 14, 10, 0.40);
+  margin-top: 4px;
+  /* font-size se nastavuje dynamicky v JS — viz SUB_FONT_MIN/MAX */
+}
+/* ════════════════════════════════════════════════ */
+</style>
 </head>
 <body>
-    <nav>
-    <a href="index.html" class="logo">
-        <img class="logo" src="img/logo_ja_normal.png" alt="Logo">
-    </a>
+<canvas id="c"></canvas>
+<div id="labels"></div>
+<script>
+/* ─── SEKCE ──────────────────────────────────────────────────── */
+const SECTIONS = [
+  { label: 'Neco o mne',   sub: '',          weight: 20, color: '#e8ddd0', href: '#studio'  },
+  { label: 'Projekty',    sub: '',        weight: 20, color: '#ccddd6', href: '#prace'   },
+  { label: 'Co umím',   sub: '',     weight: 20, color: '#d4cee8', href: '#sluzby'  },
+  { label: 'My Asset',   sub: '',   weight: 20, color: '#e4dcc8', href: '#proces'  },
+  { label: 'Kontakt',  sub: '',     weight: 20, color: '#cce0d4', href: '#kontakt' },
+];
 
-    <ul class="nav-links">
-        <li><a href="#about">O mně</a></li>
-        <li><a href="#projects">Projekty</a></li>
-        <li><a href="#contact">Kontakt</a></li>
-    </ul>
-</nav> 
+/* ─── NASTAVENÍ GRAFU ────────────────────────────────────────── */
+const HOVER_BOOST  = 1.7;   // jak moc se hovered sekce zvětší
+const GAP_DEG      = 0.1;   // mezera mezi výsečemi (stupně)
+const RADIUS_F     = 0.5;  // velikost koláče — zvyšte pro přesah mimo okraj
 
+/* ─── NASTAVENÍ LABELU ───────────────────────────────────────── */
+const LABEL_MARGIN    = 32;   // px od každého okraje obrazovky
+const LABEL_FONT_MIN  = 13;   // px — minimální velikost názvu
+const LABEL_FONT_MAX  = 44;   // px — maximální velikost názvu
+const LABEL_SUB_MIN   = 9;    // px — minimální velikost podtitulku
+const LABEL_SUB_MAX   = 13;   // px — maximální velikost podtitulku
+const LABEL_HIDE_SWEEP = 0.13; // výseče menší než toto (rad) nemají label
 
+/* ─── STAV ───────────────────────────────────────────────────── */
+const canvas   = document.getElementById('c');
+const ctx      = canvas.getContext('2d');
+const labelsEl = document.getElementById('labels');
+const DPR      = Math.min(devicePixelRatio, 2);
+let W, H, cx, cy, R;
+let VW, VH;
+let hovered  = -1;
+let weights  = SECTIONS.map(s => s.weight);
+let raf      = null;
 
+const labelEls = SECTIONS.map(s => {
+  const el = document.createElement('div');
+  el.className = 'slice-label';
+  el.innerHTML = `<span class="name">${s.label}</span><span class="sub">${s.sub.toUpperCase()}</span>`;
+  labelsEl.appendChild(el);
+  return el;
+});
 
+/* ─── RESIZE ─────────────────────────────────────────────────── */
+function resize() {
+  VW = window.innerWidth; VH = window.innerHeight;
+  W  = canvas.width  = VW * DPR;
+  H  = canvas.height = VH * DPR;
+  canvas.style.width  = VW + 'px';
+  canvas.style.height = VH + 'px';
+  cx = W / 2; cy = H / 2;
+  R  = Math.min(VW, VH) * RADIUS_F * DPR;
+  cancelAnimationFrame(raf);
+  draw();
+}
+window.addEventListener('resize', resize);
 
-    <script src="script.js"></script>
+/* ─── UTILS ──────────────────────────────────────────────────── */
+function lerp(a, b, t)     { return a + (b - a) * t; }
+function clamp(v, mn, mx)  { return Math.max(mn, Math.min(mx, v)); }
+function smoothstep(t)     { return t * t * (3 - 2 * t); }
+function hexRgb(h)         { return { r: parseInt(h.slice(1,3),16), g: parseInt(h.slice(3,5),16), b: parseInt(h.slice(5,7),16) }; }
+
+/* ─── GEOMETRIE ──────────────────────────────────────────────── */
+function targetWeights() {
+  return SECTIONS.map((s, i) => i === hovered ? s.weight * HOVER_BOOST : s.weight);
+}
+function buildSlices() {
+  const total = weights.reduce((a, w) => a + w, 0);
+  let angle = -Math.PI / 2;
+  return SECTIONS.map((s, i) => {
+    const sweep = (weights[i] / total) * Math.PI * 2;
+    const sl = { i, start: angle, sweep, ...s };
+    angle += sweep;
+    return sl;
+  });
+}
+
+/* ─── POZICE LABELU ──────────────────────────────────────────────
+   Hledáme bod na středové ose výseče (úhel mid) ve vzdálenosti
+   step od středu koláče. Postupujeme od 55 % R dovnitř tak dlouho,
+   dokud je bod uvnitř bezpečné zóny obrazovky. Tím label "připluje"
+   co nejblíže ke středu výseče ale nikdy nevyleze za okraj.
+   ─────────────────────────────────────────────────────────────── */
+function safeLabelPos(mid, sliceR) {
+  const m     = LABEL_MARGIN;
+  const rPx   = sliceR / DPR;               // R ve viewport px
+  const scx   = VW / 2, scy = VH / 2;       // střed ve viewport px
+  const cos   = Math.cos(mid), sin = Math.sin(mid);
+
+  // zkoušíme vzdálenosti od 60 % R dolů po malých krocích
+  const steps = 40;
+  for (let k = 0; k <= steps; k++) {
+    const frac = 0.60 - k * (0.55 / steps);  // 0.60 → 0.05
+    const lx   = scx + cos * rPx * frac;
+    const ly   = scy + sin * rPx * frac;
+    if (lx >= m && lx <= VW - m && ly >= m && ly <= VH - m) {
+      return { x: lx, y: ly };
+    }
+  }
+  // fallback — střed obrazovky
+  return { x: scx, y: scy };
+}
+
+/* ─── DRAW ───────────────────────────────────────────────────── */
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#f4f1ec';
+  ctx.fillRect(0, 0, W, H);
+
+  const targets = targetWeights();
+  let needs = false;
+  weights = weights.map((w, i) => {
+    const nw = lerp(w, targets[i], 0.10);
+    if (Math.abs(nw - targets[i]) > 0.05) needs = true;
+    return nw;
+  });
+
+  const slices = buildSlices();
+  const GAP    = GAP_DEG * Math.PI / 180;
+
+  slices.forEach(s => {
+    const hoverT = smoothstep(clamp((weights[s.i] - s.weight) / (s.weight * (HOVER_BOOST - 1)), 0, 1));
+    const mid    = s.start + s.sweep * 0.5;
+    const a0     = s.start + GAP * 0.5;
+    const a1     = s.start + s.sweep - GAP * 0.5;
+    if (a1 <= a0) return;
+
+    /* výseč */
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, a0, a1);
+    ctx.closePath();
+    const base = hexRgb('#ffffff'), acc = hexRgb(s.color);
+    ctx.fillStyle = `rgb(${Math.round(lerp(base.r,acc.r,hoverT))},${Math.round(lerp(base.g,acc.g,hoverT))},${Math.round(lerp(base.b,acc.b,hoverT))})`;
+    ctx.fill();
+
+    /* dělicí čáry */
+    [a0, a1].forEach(a => {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+      ctx.lineWidth   = 1 * DPR;
+      ctx.stroke();
+    });
+
+    /* label */
+    const el  = labelEls[s.i];
+    const visible = s.sweep > LABEL_HIDE_SWEEP;
+    el.style.opacity = visible ? '1' : '0';
+    if (!visible) return;
+
+    const pos = safeLabelPos(mid, R);
+    el.style.left = pos.x + 'px';
+    el.style.top  = pos.y + 'px';
+
+    const arcLen = (R / DPR) * s.sweep;
+    el.querySelector('.name').style.fontSize = clamp(Math.round(arcLen * 0.10), LABEL_FONT_MIN, LABEL_FONT_MAX) + 'px';
+    el.querySelector('.sub').style.fontSize  = clamp(Math.round(arcLen * 0.046), LABEL_SUB_MIN,  LABEL_SUB_MAX)  + 'px';
+    el.classList.toggle('hovered', s.i === hovered);
+  });
+
+  if (needs) raf = requestAnimationFrame(draw);
+}
+
+/* ─── HIT TEST ───────────────────────────────────────────────── */
+function hitTest(mx, my) {
+  const px = mx * DPR, py = my * DPR;
+  const dx = px - cx, dy = py - cy;
+  if (Math.sqrt(dx*dx+dy*dy) > R) return -1;
+  const GAP = GAP_DEG * Math.PI / 180;
+  let a = Math.atan2(dy, dx);
+  const slices = buildSlices();
+  for (let i = 0; i < slices.length; i++) {
+    const s = slices[i];
+    let n = a;
+    while (n < s.start) n += Math.PI * 2;
+    if (n >= s.start + GAP * 0.5 && n <= s.start + s.sweep - GAP * 0.5) return i;
+  }
+  return -1;
+}
+
+/* ─── EVENTS ─────────────────────────────────────────────────── */
+canvas.addEventListener('mousemove', e => {
+  const hit = hitTest(e.clientX, e.clientY);
+  canvas.style.cursor = hit >= 0 ? 'pointer' : 'default';
+  if (hit !== hovered) { hovered = hit; cancelAnimationFrame(raf); draw(); }
+});
+canvas.addEventListener('mouseleave', () => {
+  hovered = -1; canvas.style.cursor = 'default';
+  cancelAnimationFrame(raf); draw();
+});
+canvas.addEventListener('click', e => {
+  const hit = hitTest(e.clientX, e.clientY);
+  if (hit >= 0) { const h = SECTIONS[hit].href; if (h && h !== '#') window.location.href = h; }
+});
+
+resize();
+</script>
 </body>
 </html>

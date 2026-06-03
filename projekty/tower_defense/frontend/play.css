@@ -19,12 +19,26 @@ body {
   left: 5vh;
   height: 64px;
   width: 64px;
-  background-color: #f0f0f0;
+  background-color: rgb(101, 101, 101);
   image-rendering: pixelated;
 
   display: flex;
   align-items: center;
   justify-content: center;
+}
+#selFra{
+  z-index: 999999;
+position: absolute;
+  top: 90vh;
+  left: 5vh;
+  height: 64px;
+  width: 64px;
+  background-image: url(./img/heroBar.png);
+  image-rendering: pixelated;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
 }
 
 #item-selected img {
@@ -85,4 +99,205 @@ div{
   -webkit-user-drag: none;
   outline: none;
   pointer-events: none;
+}
+
+.player {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
+
+
+#baseHealth{
+  position: fixed;
+  top: 1vh;
+  width: 128px;
+}
+#healthBar {
+  position: absolute;
+  top: 1vh;
+  left: 1vw;
+  width: 128px;
+  height: 50px;
+  background-image: url(./img/bar.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  overflow: hidden; /* ořízne fill uvnitř */
+}
+
+#basefill {
+  position: absolute;
+  top: 1vh;
+  left: 1vw;
+  width: 100%;
+  height: 46px;
+  background-color: #177405;
+}
+
+#coins{
+  position: absolute;
+  top: calc(1vh + 60px);
+}
+#coinsBar{
+  position: absolute;
+  top: calc(1vh+ 60px);
+  left: 1vw;
+  width: 128px;
+  height: 50px;
+  background-image: url(./img/bar.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+#coinsFill{
+  position: absolute;
+  top: calc(1vh+ 60px);
+  left: 1vw;
+  width: 128px;
+  height: 46px;
+  background-color: #9d5a0d;
+}
+
+
+#heroFrame{
+  position: fixed;
+  top: 1vh;
+  left:calc(2% + 128px);
+  width: 60px;
+  height: 60px;
+  pointer-events: all;
+}
+
+#heroBar{
+  position: fixed;
+  top: 1vh;
+  left:calc(2% + 128px);
+  width: 60px;
+  height: 60px;
+  background-image: url(./img/heroBar.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  pointer-events: all;
+}
+
+#heroImg{
+  position: fixed;
+  top: calc(1vh+50px);
+  left:calc(2% + 138px);
+  width: 42px;
+  height: 50px;
+  background-image: url(./img/ninja.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  pointer-events: all;
+}
+
+.filler{
+  height: 100%;
+  width: 100%;
+  background-color: rgb(31, 31, 31);
+}
+
+
+
+
+
+.entity-health-bar {
+  position: fixed;
+  pointer-events: none;
+  z-index: 100;
+  width: 48px;
+  height: 20px;
+  background-image: url(./img/bar.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
+.entity-health-fill {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99;
+  width: 48px;
+  height: 1px;
+}
+
+.entity-health-fill.enemy  { background-color: #a01010; }
+.entity-health-fill.ally   { background-color: #177405; }
+
+#towerBar{
+  position: fixed;
+  top: 1vh ;
+  left: calc(128px + 60px + 3%);
+  width: 540px;
+  height: 90px;
+  pointer-events: all;
+  
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+
+#towerBarFrame{
+position: fixed;
+  top: 1vh;
+  left:calc(128px + 60px + 3%);
+  width: 540px;
+  height: 90px;
+  background-image: url(./img/towerbar.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
+#towerBarFiller{
+position: fixed;
+  top: 1vh;
+  left: calc(128px + 60px + 3%);
+  width: 540px;
+  height: 90px;
+  background-color: rgb(31, 31, 31);
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+
+.tower-slot {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  pointer-events: all;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.tower-icon {
+  position: absolute;
+  inset: 4px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.tower-frame {
+  position: absolute;
+  inset: 0;
+  background-image: url('./img/heroBar.png'); /* stejný rámeček jako hero, nebo vlastní */
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.decor{
+  z-index: -9;
 }

@@ -8,10 +8,41 @@
     <link rel="stylesheet" href="play.css">
 </head>
 <body>
+    <div id="heroFrame" class="ui">
+        <div id="heroImg"></div>
+        <div id="heroBar"></div>
+        <div class="filler"></div>
+    </div>
+
+    <div id="towerBar" class="ui">
+        <div id="towerBarFiller" class="ui">
+        </div>
+        <div id="towerBarFrame" class="ui">
+
+        </div>
+        
+    </div>
+    
+    <div id="coins" class="ui">
+        <div id="coinsFill">
+            <p id="coinText">coins</p>
+        </div>
+        <div id="coinsBar"></div>
+    </div>
+
+    <div id="baseHealth" class="ui">
+        <div id="basefill">
+        </div>
+        <div id="healthBar">
+            <p id="healthText">health</p>
+        </div>
+    </div>
 
     <div id="item-selected" class="ui"></div>
-    <div class="in-game player" id="player"><img src="img/ninja.png" alt="" style="height: 64px;"></div>
-    <script src="play.js"></script>
+    <div id="selFra"></div>
     <button id="home" class="ui" onclick="window.location.href='index.html'"></button>
+    
+    <script src="entities.js"></script>
+    <script src="play.js"></script>
 </body>
 </html>

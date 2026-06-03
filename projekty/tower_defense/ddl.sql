@@ -8,6 +8,186 @@ BEGIN
 END;
 /
 
+-- ============================================================================
+-- 1. DROPOVÁNÍ STARÝCH TABULEK (Smazání databáze s ošetřením vazeb)
+-- ============================================================================
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_wave_enemies CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_waves CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_user_friends CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_towers CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_tower_types CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_lead CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_enemies CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_en_typ CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_base CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE nt_users CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;
+/
+
+-- ============================================================================
+-- 2. VYTVOŘENÍ NOVÝCH TABULEK S AUTO-INCREMENTY (IDENTITY)
+-- ============================================================================
+
+-- UŽIVATELÉ (ID se generuje automaticky)
+CREATE TABLE nt_users (
+    user_id      NUMBER GENERATED ALWAYS AS IDENTITY,
+    username     VARCHAR2(40) NOT NULL,
+    pasword_hash VARCHAR2(400),
+    CONSTRAINT nt_users_PK PRIMARY KEY (user_id),
+    CONSTRAINT nt_users_username_UN UNIQUE (username)
+);
+
+-- ZÁKLADNA HRÁČE (PK je sdílené s nt_users, takže tady auto-increment není schválně, aby to sedělo 1:1)
+CREATE TABLE nt_base (
+    nt_users_user_id INTEGER NOT NULL,
+    base_health      FLOAT(2) DEFAULT 100,
+    base_max_health  FLOAT(2) DEFAULT 100,
+    base_classes     VARCHAR2(300),
+    heroX            FLOAT(2) DEFAULT 80,
+    heroY            FLOAT(2) DEFAULT 80,
+    hero_classes     VARCHAR2(300),
+    hero_health      INTEGER DEFAULT 50,
+    hero_max_health  INTEGER DEFAULT 50,
+    coins            INTEGER DEFAULT 0,
+    score            INTEGER DEFAULT 0,
+    "level"          INTEGER DEFAULT 1,
+    base_attak       INTEGER DEFAULT 2,
+    hero_attak       INTEGER DEFAULT 2,
+    CONSTRAINT nt_base_PK PRIMARY KEY (nt_users_user_id)
+);
+
+-- ŠABLONY NEPŘÁTEL
+CREATE TABLE nt_en_typ (
+    name             VARCHAR2(40) NOT NULL,
+    classes          VARCHAR2(300) NOT NULL,
+    stats_config     VARCHAR2(200) NOT NULL,
+    animation_config VARCHAR2(1000) NOT NULL,
+    CONSTRAINT nt_en_typ_PK PRIMARY KEY (name)
+);
+
+-- ŽIVÍ NEPŘÁTELÉ NA MAPĚ
+CREATE TABLE nt_enemies (
+    x                        FLOAT(2) NOT NULL,
+    y                        FLOAT(2) NOT NULL,
+    extra_classes            VARCHAR2(300),
+    "level"                  INTEGER NOT NULL,
+    nt_base_nt_users_user_id INTEGER NOT NULL,
+    nt_en_typ_name           VARCHAR2(40) NOT NULL,
+    CONSTRAINT nt_enemies_PK PRIMARY KEY (nt_en_typ_name, nt_base_nt_users_user_id)
+);
+
+-- ŽEBŘÍČEK (ID řádku se generuje automaticky)
+CREATE TABLE nt_lead (
+    row_id           NUMBER GENERATED ALWAYS AS IDENTITY,
+    score            INTEGER NOT NULL,
+    nt_users_user_id INTEGER NOT NULL,
+    CONSTRAINT nt_lead_PK PRIMARY KEY (row_id)
+);
+
+-- ŠABLONY VĚŽÍ
+CREATE TABLE nt_tower_types (
+    name             VARCHAR2(40) NOT NULL,
+    classes          VARCHAR2(300) NOT NULL,
+    stats_config     VARCHAR2(200) NOT NULL,
+    animation_config VARCHAR2(1000) NOT NULL,
+    CONSTRAINT nt_tower_types_PK PRIMARY KEY (name)
+);
+
+-- POSTAVENÉ VĚŽE NA MAPĚ
+CREATE TABLE nt_towers (
+    x                        FLOAT(2) NOT NULL,
+    y                        FLOAT(2) NOT NULL,
+    extra_classes            VARCHAR2(300),
+    "level"                  INTEGER NOT NULL,
+    nt_base_nt_users_user_id INTEGER NOT NULL,
+    nt_tower_types_name      VARCHAR2(40) NOT NULL
+);
+
+-- PŘÁTELÉ (Vazební tabulka M:N)
+CREATE TABLE nt_user_friends (
+    nt_users_user_id  INTEGER NOT NULL,
+    nt_users_user_id2 INTEGER NOT NULL,
+    CONSTRAINT nt_user_friends_PK PRIMARY KEY (nt_users_user_id, nt_users_user_id2)
+);
+
+-- VLNY NEPŘÁTEL (ID vlny se generuje automaticky)
+CREATE TABLE nt_waves (
+    wave_id       NUMBER GENERATED ALWAYS AS IDENTITY,
+    wave          INTEGER NOT NULL,
+    budget        INTEGER NOT NULL,
+    bonus_classes VARCHAR2(300),
+    CONSTRAINT nt_waves_PK PRIMARY KEY (wave_id)
+);
+
+-- NEPŘÁTELÉ VE VLNÁCH (Vazební tabulka M:N)
+CREATE TABLE nt_wave_enemies (
+    nt_waves_wave_id INTEGER NOT NULL,
+    nt_en_typ_name   VARCHAR2(40) NOT NULL,
+    CONSTRAINT nt_wave_enemies_PK PRIMARY KEY (nt_waves_wave_id, nt_en_typ_name)
+);
+
+-- ============================================================================
+-- 3. DEFINICE CIZÍCH KLÍČŮ (FOREIGN KEYS)
+-- ============================================================================
+ALTER TABLE nt_base ADD CONSTRAINT nt_base_nt_users_FK FOREIGN KEY (nt_users_user_id) REFERENCES nt_users (user_id);
+ALTER TABLE nt_enemies ADD CONSTRAINT nt_enemies_nt_base_FK FOREIGN KEY (nt_base_nt_users_user_id) REFERENCES nt_base (nt_users_user_id);
+ALTER TABLE nt_enemies ADD CONSTRAINT nt_enemies_nt_en_typ_FK FOREIGN KEY (nt_en_typ_name) REFERENCES nt_en_typ (name);
+ALTER TABLE nt_lead ADD CONSTRAINT nt_lead_nt_users_FK FOREIGN KEY (nt_users_user_id) REFERENCES nt_users (user_id);
+ALTER TABLE nt_towers ADD CONSTRAINT nt_towers_nt_base_FK FOREIGN KEY (nt_base_nt_users_user_id) REFERENCES nt_base (nt_users_user_id);
+ALTER TABLE nt_towers ADD CONSTRAINT nt_towers_nt_tower_types_FK FOREIGN KEY (nt_tower_types_name) REFERENCES nt_tower_types (name);
+ALTER TABLE nt_user_friends ADD CONSTRAINT nt_user_friends_nt_users_FK FOREIGN KEY (nt_users_user_id) REFERENCES nt_users (user_id);
+ALTER TABLE nt_user_friends ADD CONSTRAINT nt_user_friends_nt_users_FKv2 FOREIGN KEY (nt_users_user_id2) REFERENCES nt_users (user_id);
+ALTER TABLE nt_wave_enemies ADD CONSTRAINT nt_wave_enemies_nt_en_typ_FK FOREIGN KEY (nt_en_typ_name) REFERENCES nt_en_typ (name);
+ALTER TABLE nt_wave_enemies ADD CONSTRAINT nt_wave_enemies_nt_waves_FK FOREIGN KEY (nt_waves_wave_id) REFERENCES nt_waves (wave_id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 ------------------------------------------------------------
 -- DROP EXISTING NT_ SEQUENCES
 ------------------------------------------------------------
@@ -117,3 +297,4 @@ CREATE TABLE nt_player_items (
         REFERENCES nt_items(item_id)
 );
 
+*/
