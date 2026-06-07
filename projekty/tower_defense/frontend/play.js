@@ -5,6 +5,82 @@ const SPEED = 8;
 const keysDown = {};
 const towerBar = document.getElementById('towerBar');
 const heroBar = document.getElementById('heroFrame');
+const home = document.getElementById("home");
+const pause = document.getElementById('pauseBtn');
+pause.addEventListener('click', togglePause);
+const FSbtn = document.getElementById('full_screen');
+const elem = document.documentElement;
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}
+FSbtn.addEventListener('click' , () => {
+  if (!document.fullscreenElement) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { // Safari
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { // starý Edge/IE
+      elem.msRequestFullscreen();
+    }
+  } else {
+    // Vypnout fullscreen
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+});
+
+// ─── Pause System ─────────────────────────────────────────────────────────────
+window._gamePaused = false;
+
+function pauseGame() {
+  if (window._gamePaused) return;
+  window._gamePaused = true;
+
+  // Stop all behavior ticks
+  (window._gameEntities ?? []).forEach(e => {
+    e.behavior?.stopTick();
+  });
+
+  // Freeze all animations on their current frame
+  (window._gameEntities ?? []).forEach(e => {
+    if (e.anim?._timer) {
+      clearInterval(e.anim._timer);
+      e.anim._timer = null;
+      e.anim._paused = true;
+    }
+  });
+}
+
+function resumeGame() {
+  if (!window._gamePaused) return;
+  window._gamePaused = false;
+
+  // Restart all behavior ticks
+  (window._gameEntities ?? []).forEach(e => {
+    if (e.behavior && e.stats?.alive !== false) {
+      e.behavior.startTick(30);
+    }
+  });
+
+  // Resume animations
+  (window._gameEntities ?? []).forEach(e => {
+    if (e.anim?._paused && e.anim.currentAnim) {
+      e.anim._paused = false;
+      e.anim.play(e.anim.currentAnim); // replays from frame 0 — acceptable for loops
+    }
+  });
+}
+
+function togglePause() {
+  window._gamePaused ? resumeGame() : pauseGame();
+}
+
 
 
 let skills = {
@@ -31,6 +107,8 @@ let enemies ={};
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+
+
   const player = document.getElementById('player');
   generateGrass(100);
   startLoop();
@@ -45,17 +123,18 @@ function startLoop() {
   document.addEventListener('keyup',   e => keysDown[e.key.toLowerCase()] = false);
 
   function tick() {
-    let dx = 0, dy = 0;
-    if (keysDown['w'] || keysDown['arrowup'])    dy -= SPEED;
-    if (keysDown['s'] || keysDown['arrowdown'])  dy += SPEED;
-    if (keysDown['a'] || keysDown['arrowleft'])  dx -= SPEED;
-    if (keysDown['d'] || keysDown['arrowright']) dx += SPEED;
+    if (!window._gamePaused) {
+      let dx = 0, dy = 0;
+      if (keysDown['w'] || keysDown['arrowup'])    dy -= SPEED;
+      if (keysDown['s'] || keysDown['arrowdown'])  dy += SPEED;
+      if (keysDown['a'] || keysDown['arrowleft'])  dx -= SPEED;
+      if (keysDown['d'] || keysDown['arrowright']) dx += SPEED;
 
-    if (dx !== 0 || dy !== 0) {
-      worldX += dx;
-      worldY += dy;
-    }
-    
+      if (dx !== 0 || dy !== 0) {
+        worldX += dx;
+        worldY += dy;
+      }
+  }
       updateAll();
       requestAnimationFrame(tick);
   }
@@ -130,7 +209,7 @@ function setSkillImg(name){
     let img = document.createElement('img');
     actSki.appendChild(img);
   }
-  actSki.firstChild.src='/projekty/tower_defense/frontend/img/SelectSkillImg/' + name + '.png';
+  actSki.firstChild.src='./img/SelectSkillImg/' + name + '.png';
   
 }
 
@@ -173,7 +252,7 @@ async function buildTowerBar() {
     let animConf = null;
     
     try {
-      const response = await fetch(`http://localhost:3000/api/tower-type/${name}`);
+      const response = await fetch(`ninjatower.up.railway.app/api/tower-type/${name}`);
 
       if (!response.ok) {
         throw new Error(`Typ věže '${name}' nebyl nalezen.`);
@@ -213,12 +292,13 @@ buildTowerBar();
 
 document.addEventListener('click', (e) => {
   if (e.target.closest('.ui')) return;
+  if (window._gamePaused) return; 
 
   if (skills[ruka]) {
-        skills[ruka](e);
-    } else {
-        console.warn("Neznámá akce:", ruka);
-    }
+    skills[ruka](e);
+  } else {
+    console.warn("Neznámá akce:", ruka);
+  }
 });
 
 
@@ -271,7 +351,7 @@ async function getDataOfGame(username,password) {
   let baseAtk = 2;
 
   try {
-    const response = await fetch("http://localhost:3000/api/base/get-data", {
+    const response = await fetch("ninjatower.up.railway.app/api/base/get-data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -357,3 +437,126 @@ spawnEntity({
 }
 
 getDataOfGame("filip","mojeHeslo123");
+
+
+
+
+// ─── Mobile Detection ─────────────────────────────────────────────────────────
+const isMobile = () => window.matchMedia('(max-width: 768px)').matches 
+                    || ('ontouchstart' in window);
+
+// ─── Landscape Lock Overlay (CSS injection) ───────────────────────────────────
+(function injectLandscapeLock() {
+  const style = document.createElement('style');
+  style.textContent = `
+    #portrait-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #0a0a0a;
+      color: #fff;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+      font-size: 1.2rem;
+      gap: 16px;
+      text-align: center;
+    }
+    #portrait-overlay svg {
+      width: 64px; height: 64px;
+      animation: rotateHint 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes rotateHint {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(90deg); }
+    }
+    @media (max-width: 768px) and (orientation: portrait) {
+      #portrait-overlay { display: flex; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'portrait-overlay';
+  overlay.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="5" y="2" width="14" height="20" rx="2"/>
+      <circle cx="12" cy="18" r="1"/>
+    </svg>
+    <span>Otočte telefon na šířku</span>
+    <small style="opacity:.5">Hra vyžaduje landscape režim</small>
+  `;
+  document.body.appendChild(overlay);
+})();
+
+
+// ─── Touch Movement ────────────────────────────────────────────────────────────
+(function initTouchControls() {
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let lastTouchX = 0;
+  let lastTouchY = 0;
+  let isSwiping = false;
+  const SWIPE_THRESHOLD = 5;
+
+  document.addEventListener('touchstart', (e) => {
+    // Ignoruj UI elementy
+    if (e.target.closest('.ui')) return;
+
+    const t = e.touches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+    lastTouchX  = t.clientX;
+    lastTouchY  = t.clientY;
+    isSwiping   = false;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (e.target.closest('.ui')) return;
+    if (window._gamePaused) return; // ← blokuj pohyb při pause
+
+    const t = e.touches[0];
+    const dx = t.clientX - lastTouchX;
+    const dy = t.clientY - lastTouchY;
+
+    // Pokud jsme se pohnuli víc než práh → je to swipe
+    if (Math.abs(t.clientX - touchStartX) > SWIPE_THRESHOLD ||
+        Math.abs(t.clientY - touchStartY) > SWIPE_THRESHOLD) {
+      isSwiping = true;
+    }
+
+    if (isSwiping) {
+      // Pohyb kamery (opačný směr než prst — jako mapa)
+      worldX -= dx;
+      worldY -= dy;
+      updateAll();
+    }
+
+    lastTouchX = t.clientX;
+    lastTouchY = t.clientY;
+
+    e.preventDefault(); // zabraň scrollování stránky
+  }, { passive: false });
+
+  document.addEventListener('touchend', (e) => {
+    if (e.target.closest('.ui')) return;
+    if (window._gamePaused) return; // ← blokuj skill při pause
+
+    // Krátký tap (ne swipe) = použij skill
+    if (!isSwiping) {
+      const t = e.changedTouches[0];
+      const syntheticEvent = {
+        clientX: t.clientX,
+        clientY: t.clientY,
+        target:  t.target,
+      };
+      if (skills[ruka]) {
+        skills[ruka](syntheticEvent);
+      }
+    }
+
+    isSwiping = false;
+  }, { passive: true });
+})();

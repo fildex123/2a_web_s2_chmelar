@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ninja Hra</title>
     <link rel="icon" type="image/png" href="img/ninja.png">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="play.css">
 </head>
 <body>
@@ -38,9 +39,12 @@
         </div>
     </div>
 
+    <button id="full_screen" class="menu seeing ui">Full screen</button>
+
     <div id="item-selected" class="ui"></div>
     <div id="selFra"></div>
-    <button id="home" class="ui" onclick="window.location.href='index.html'"></button>
+    <button id="pauseBtn" class="ui"></button>
+    <button id="home" onclick="window.location.href='index.html'" class="ui"></button>
     
     <script src="entities.js"></script>
     <script src="play.js"></script>

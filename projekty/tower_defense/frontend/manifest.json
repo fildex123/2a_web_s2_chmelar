@@ -1,0 +1,13 @@
+{
+  "name": "Ninja Hra",
+  "short_name": "Ninja",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "img/ninja.png", "sizes": "any", "type": "image/png" }
+  ]
+}

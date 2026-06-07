@@ -6,7 +6,10 @@ html, body, button, a, div, span, canvas {
   cursor: url('img/aim.png') 22 22, none !important;
   image-rendering: pixelated;
 }button, a, span,#item-selected:hover{cursor: url('img/aim-hover.png') 22 22, none !important;}
-
+html, body {
+  overflow: hidden;
+  touch-action: none;
+}
 body {
     font-family: Arial, sans-serif;
     background: #f0f0f0;
@@ -15,7 +18,7 @@ body {
 }
 #item-selected {
   position: absolute;
-  top: 90vh;
+  top: 87vh;
   left: 5vh;
   height: 64px;
   width: 64px;
@@ -29,7 +32,7 @@ body {
 #selFra{
   z-index: 999999;
 position: absolute;
-  top: 90vh;
+  top: 87vh;
   left: 5vh;
   height: 64px;
   width: 64px;
@@ -62,8 +65,8 @@ position: absolute;image-rendering: pixelated;
   image-rendering: pixelated;
 }
 #home{
-  height: 8vh;
-  width: 8vh;
+height: 64px;
+width: 64px;
   left: 94%; top: 2%;   
   background-image: url('img/home_touched.png');
 }#home:hover{background-image: url('img/homu_untouched.png');}
@@ -87,10 +90,6 @@ img{
   -webkit-user-drag: none;
   user-drag: none;
   pointer-events: none;
-}
-
-.bigger{
-  scale:3;
 }
 
 div{
@@ -125,7 +124,7 @@ div{
   background-repeat: no-repeat;
   background-size: 100% 100%;
   image-rendering: pixelated;
-  overflow: hidden; /* ořízne fill uvnitř */
+  overflow: hidden;
 }
 
 #basefill {
@@ -300,4 +299,79 @@ position: fixed;
 
 .decor{
   z-index: -9;
+}
+
+#full_screen{
+height: 50px;
+width: 50px;
+left: calc(94% - 65px); top: 2%;   
+background-image: url('./img/squre_div.png');
+font-size: smaller;
+
+  pointer-events: all;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
+.seeing{
+display: inline;
+}
+
+.none{
+  display: none;
+}
+
+
+
+@media (max-width: 900px) and (orientation: landscape) {
+  
+#towerBar{
+  width: 450px;
+  height: 75px;
+  
+  gap: 5px;
+}
+
+
+#towerBarFrame{
+  width: 450px;
+  height: 75px;
+}
+
+#towerBarFiller{
+  width: 450px;
+  height: 75px;
+  gap: 5px;
+}
+
+
+.tower-slot {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+}
+
+.tower-icon {
+  inset: 3px;
+}
+
+
+#item-selected {
+  top: 79vh;
+}
+
+
+#selFra{
+  top: 79vh;
+}
+
+
+#home{
+  height: 48px;
+  width: 48px;
+  left: 92%; top: 2%;
+}
+
 }
