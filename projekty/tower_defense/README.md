@@ -28,6 +28,13 @@ Frontend je postaven čistě v HTML, CSS a vanilla JS bez frameworků. Backend b
 - bcrypt pro hashování hesel
 - Nasazeno na Railway
 
+## End pointy
+- /api/test -> testuje funkčnost backendu
+- /api/auth/register -> vepíše nového uživatele
+- /api/base/get-data -> získá data o base konkrétního hráče(heslo třeba)
+- api/base/create -> vytvoří základnu. když někdo nemá rozehranou hru a zmáčkne play
+- /api/tower-type/:name -> získá konkrétní data o tower
+
 ---
 
 ## Herní mechaniky
